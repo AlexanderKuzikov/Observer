@@ -170,48 +170,32 @@ Pillow + pillow-avif-plugin в Python.
 | Инструмент | Последний релиз | Лицензия | Статус |
 |---|---|---|---|
 | Scrapy | 2.19.0 (10.09.2026) | BSD-3 | **жив** |
-| httpx | 0.28.1 — **2024-12** | BSD | замедлился, но рабочий |
 | **curl_cffi** | **0.16.3 (02.09.2026)** | MIT | **жив** — TLS impersonation через curl-impersonate |
 | curl-impersonate (низ) | v0.6.1 (03.2024) | MIT | заброшен, но используется повсеместно |
-| **tls-client** | 1.0.1 — **2024-02** | — | **мёртв** |
-| nodriver | 0.50.3 (13.05.2026) | **AGPL-3.0** ⚠️ | жив, но AGPL |
-| Camoufox | 0.5.6 (06.09.2026) | MPL-2.0 | README: **«under development, may not be suitable for stable production use»** |
 | **patchright** | **1.63.0 (20.09.2026)** | Apache-2.0 | **жив** — патчит Playwright, скрывает CDP-утечки |
-| **undetected-chromedriver** | 3.5.5 — **2024-02** | GPL-3.0 | **мёртв фактически.** 2,5 года без релиза |
-| rebrowser-puppeteer / playwright | 24.8.1 / 1.52.0 — **2025-05** | MIT | **мёртвы**, заменены на patchright |
-| puppeteer-extra (+stealth) | 3.3.6 / 2.11.2 — **2023-03** | MIT | **мёртв** |
-| **Scrapling** | 0.4.15 (23.08.2026) | BSD-3 | **жив, 84,8k★** — самый быстрорастущий anti-bot SDK |
+| **Scrapling** | 0.4.15 (23.08.2026), 84,8k★ | BSD-3 | **жив** — самый быстрорастущий anti-bot SDK |
 | DrissionPage | 4.1.1.4 (27.05.2026) | BSD | жив — управление реальным Chrome |
 | Playwright / Puppeteer | 1.63.0 / 25.12.0 | Apache-2.0 | живы |
-| got / undici / axios | 16.0.0 / 8.11.2 / 1.20.0 | MIT | живы |
-| @sparticuz/chromium | 153.0.0 (11.09.2026) | — | жив, для Lambda/контейнеров |
+| httpx | 0.28.1 — **2024-12** | BSD | замедлился, рабочий |
+| nodriver | 0.50.3 (13.05.2026) | **AGPL-3.0** ⚠️ | жив |
+| Camoufox | 0.5.6 (06.09.2026) | MPL-2.0 | README: **«not for production»** |
+| **undetected-chromedriver** | 3.5.5 — **02.2024** | GPL-3.0 | **мёртв**, 2,5 года без релиза |
+| rebrowser-puppeteer / playwright | — **2025-05** | MIT | **мёртвы** |
+| puppeteer-extra | — **2023-03** | MIT | **мёртв** |
+| **tls-client** | 1.0.1 — **2024-02** | — | **мёртв** |
+| @sparticuz/chromium | 153.0.0 (11.09.2026) | — | жив, для Lambda |
 
-### Что реально работает против российских госсайтов
+**Как устроена защита на российских хостах:**
 
-**sudrf.ru (ГАС «Правосудие»):** главная `index.php?id=300` отдаётся **без
-капчи**, на старом PHP/jQuery. Капча — на `bsr.sudrf.ru` (банк судебных актов).
-С российского IP `bsr.sudrf.ru` **не отвечает вообще** (TCP timeout, DNS
-84.42.111.136 резолвится) — то ли фильтрация по репутации IP, то ли сам хост.
-**Нужен российский/домашний IP или резидентный прокси.**
+- `sudrf.ru` — главная отдаётся **без капчи**, старый PHP + jQuery 1.10.1.
+- `kad.arbitr.ru` — **DDoS-Guard** (`Server: ddos-guard`, куки
+  `__ddg1_/8_/9_/10_`). Капча `pravocaptcha` появляется **после превышения числа
+  попыток**, блокировка ~3 минуты. Это rate-limit, а не капча на каждый запрос.
+- ФНС — числовая картинка, порог по числу запросов.
 
-**kad.arbitr.ru:** сервер **ddos-guard** (видно по `Server: ddos-guard` и кукам
-`__ddg1_/8_/9_/10_`). Капча `pravocaptcha` появляется **не сразу, а после
-превышения числа попыток**: текст «Превышено количество попыток ввода кода» +
-«До сброса ~3 минуты». То есть первые N запросов проходят без капчи, дальше нужен
-решатель. **Не капча на каждый запрос, а rate-limit с последующей блокировкой на
-3 минуты.**
-
-### Практический вывод
-
-1. **TLS:** `curl_cffi` с `impersonate="chrome"` — базовая линия, дёшево, работает
-   против ddos-guard.
-2. **Браузер:** `patchright` (живой, Apache-2.0) — вторая линия. `Camoufox` —
-   только если детект сложный, с пониманием риска «не для прода».
-3. **Фингерпринт IP решает всё.** ddos-guard и sudrf фильтруют по репутации IP.
-   Домашний IP / мобильный прокси важнее любого стелса.
-4. `undetected-chromedriver` — не использовать. 2 года без релиза.
-5. tlsfuzzer — инструмент для **тестирования** TLS, не для обхода.
-
+**Порядок эскалации для обхода:** `curl_cffi impersonate="chrome"` как базовая
+линия → `patchright` при сложном детекте. Фингерпринт IP значит больше любого
+стелса: фильтрация идёт по репутации адреса.
 ## 6. Капчи
 
 ### RuCaptcha — цены проверены 01.10.2026
@@ -292,24 +276,29 @@ PyPI, npm, GitHub, Hugging Face, jsdelivr, Docker Hub — всё доступн�
 > облачные OCR API (Mathpix, ocr.space, Azure Document Intelligence, Google
 > Document AI).
 
-## 8. Привязка к проектам
+## 8. Привязка к проектам — удалено
 
-| Проект | Стек на 2026 | Менять |
-|---|---|---|
-| **PDFtoText** | PyMuPDF 1.28.2 + pikepdf. OCR-слой — ocrmypdf 17.13 (`--deskew`/`--rotate-pages`) + Tesseract 5.5.3 rus | **Лицензия:** если продаётся как закрытый продукт — AGPL не подходит, переходить на pikepdf + pdfplumber + pypdf |
-| **DOCX-Builder** | Typst 0.15.1 для PDF + python-docx/docxtpl если нужен .docx. Конвертация: LibreOffice 26.8 headless или ONLYOFFICE 9.4 | Не трогать без лицензионной необходимости. Если нужна чистота — Typst + docxtpl полностью MIT/LGPL |
-| **DOCX-Ream** | docxtpl + docxcompose 2.2.0 | — |
-| **DocuDeskew** | ocrmypdf `--deskew`/`--rotate-pages` для PDF; deskew 1.6.1 или OpenCV для картинок | **В PyMuPDF встроенного deskew нет** |
-| **DocuMind** | Tesseract 5.5.3 + tessdata_best (rus) для печатного; PaddleOCR 3.7 PP-OCRv5 ru для грязных; Docling 2.131 для layout. **Все три работают на CPU без GPU** | Для доков 195-х: ни один готовый инструмент не подойдёт — нужен собственный дообученный traineddata |
-| **Image-Converter** | sharp 0.35.5 или Pillow 12.3 + pillow-avif-plugin. AVIF — libavif 1.4.2 | Убрать imagemin и squoosh. JXL не тащить |
-| **Resizer** | `kernel: lanczos3`, shrink-on-load, progressive + mozjpeg, withIccProfile | — |
-| **Webp-Catalog-Builder / flat-webp-*** | sharp для ресайза, `vipsthumbnail` для файлового батча | — |
-| **SudRF-Parser / CourtHarvester** | curl_cffi 0.16.3 (`impersonate="chrome"`) как базовая линия + patchright 1.63 как эскалация + RuCaptcha (18–44 ₽/1000) + резидентный российский IP | **Убрать** undetected-chromedriver, rebrowser-*, puppeteer-extra, tls-client. Camoufox — только эксперимент |
+Первая версия части содержала таблицу «проект → что менять». Это была ошибка:
+она строилась по наличию папок в `D:\GitHub\`, а не по чтению кода.
 
-### Три критичных предупреждения
+Проверкой `package.json` установлено:
 
-1. **PyMuPDF — AGPL-3.0.** Для закрытого коммерческого продукта в продажу это
-   юридический риск. Держать MIT-стек.
-2. **undetected-chromedriver мёртв**, несмотря на 12,8k★.
-3. **Camoufox README прямо говорит, что проект не для продакшена.** Не строить на
-   нём коммерческое решение.
+| Библиотека | Факт |
+|---|---|
+| `tsup` | используется только в `DocuDeskew` (`^8.5.1`) |
+| `imagemin` | **не используется нигде** |
+| `squoosh` | **не используется нигде** |
+| PyMuPDF (`import fitz`) | **не используется нигде** |
+| `sharp` | 0.32–0.34 в 9 проектах: `flat-webp-batcher`, `flat-webp-pricer`, `FloraMaverick`, `FloriCut`, `Foliant`, `HVSorter`, `Image-Converter`, `Luminar/backend`, `MapControl`. Актуальная — 0.35.5 |
+| `playwright` | только `Agent-001` (`^1.50.0`) |
+
+Следствия: рекомендации «выкинуть imagemin», «переехать с PyMuPDF из-за AGPL»
+и «заменить tsup» в применённом виде не имели оснований. PyMuPDF-риск AGPL
+остаётся верным как общий факт о лицензии, но твой код его не затрагивает.
+
+## Не верифицировано
+
+Пакеты PyPI по sudrf/fssp/fedresurs/zalogov · содержимое README
+`Tig-Lakt/parser_tz` (источник утверждения о wasm-детекте) · точный текст
+ошибок RuCaptcha по типам капч (цены проверены, полный прайс не выгружен).
+
