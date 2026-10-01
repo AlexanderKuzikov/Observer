@@ -111,7 +111,7 @@ service (проект tsgo). Официальные бенчмарки Microsoft
 
 Применимость: дыра срабатывает только при установке wheel через `uv`. В
 окружении пользователя `uv.lock` нет ни в одном проекте, `uv tool list` пуст —
-версию в PATH даёт копия внутри `AppData\Local\hermes\bin`. К его проектам
+версию в PATH даёт копия, поставленная сторонней программой. К его проектам
 отношения не имеет.
 
 ### 2.4 Прочие версии
@@ -256,4 +256,5 @@ ARIA snapshots — качественный скачок: агент читае�
 acceptance rate EAGLE-3 draft (нужен `speed-bench`) · Semgrep Pro точная цена ·
 Doguhan/Phrase exact-цены WebPageTest API · MCP-сервер Ollama/LM Studio и
 grep.app — отсутствие не доказано.
+
 
