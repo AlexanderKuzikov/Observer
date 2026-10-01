@@ -109,6 +109,11 @@ service (проект tsgo). Официальные бенчмарки Microsoft
 **`uv 0.12.18` исправил path traversal при установке wheel на Windows**
 (GHSA-2cv4-cqwr-gwf7). Актуальная версия — **0.12.21**.
 
+Применимость: дыра срабатывает только при установке wheel через `uv`. В
+окружении пользователя `uv.lock` нет ни в одном проекте, `uv tool list` пуст —
+версию в PATH даёт копия внутри `AppData\Local\hermes\bin`. К его проектам
+отношения не имеет.
+
 ### 2.4 Прочие версии
 
 | Инструмент | Актуальная версия |
@@ -251,3 +256,4 @@ ARIA snapshots — качественный скачок: агент читае�
 acceptance rate EAGLE-3 draft (нужен `speed-bench`) · Semgrep Pro точная цена ·
 Doguhan/Phrase exact-цены WebPageTest API · MCP-сервер Ollama/LM Studio и
 grep.app — отсутствие не доказано.
+

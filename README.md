@@ -52,7 +52,7 @@
 - **FAQ-разметка убрана из выдачи Google 07.05.2026.** `llms.txt` объявлен
   ненужным.
 - **PyMuPDF — AGPL-3.0.** Для закрытого коммерческого продукта это риск.
-- **`uv 0.12.18` исправил path traversal на Windows** (GHSA-2cv4-cqwr-gwf7).
+- **`uv 0.12.18` исправил path traversal на Windows** (GHSA-2cv4-cqwr-gwf7). Актуально как общий факт: к коду пользователя не относится.
 - **Санкционных блокировок инфраструктуры разработки из РФ нет.** npm, PyPI,
   GitHub, Hugging Face, jsdelivr, Docker Hub доступны.
 
@@ -79,3 +79,4 @@ cd Observer
 ## Лицензия
 
 [Apache-2.0](LICENSE) © Alexander Kuzikov
+
