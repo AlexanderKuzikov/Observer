@@ -1,0 +1,40 @@
+# Локальное окружение / OS
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Редакторы и IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Сборка и зависимости (на случай появления кода)
+node_modules/
+dist/
+build/
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+target/
+
+# Временные файлы
+*.tmp
+*.bak
+*.log
+tmp/
+temp/
+
+# Секреты — никогда не коммитить
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+secrets.yaml
+
+# ОС Windows
+Thumbs.db
+Desktop.ini
